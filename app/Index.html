@@ -31,6 +31,7 @@
                                 <ol data-bind="foreach: children">\
                                     <li><input data-bind="text: text"/>\
                                     <input type="checkbox" data-bind="checked: complete"/>\
+                                    <button data-bind="click: AddNode">+<button/>\
                                     </li>\
                                     <list-item params="node: $data"></list-item>\
                                 </ol>\
@@ -69,6 +70,16 @@
                 }
             }
 
+            <!-- add and remove node functions -->
+            this.AddNode = function() {
+                var node = {text: "text", complete: false, children: []}
+                data.root.children.push(node);
+            }
+
+            this.RemoveNode = function() {
+
+            }
+            
             var vm = {
                 rootNode: ko.observable(),
                 nodeItems: ko.observableArray([]),
