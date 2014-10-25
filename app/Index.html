@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>UberList</title>
+        <script src="knockout-3.2.0.debug.js"></script>        
+        <script src="jquery-2.1.1.js"></script>
+    </head>
+<body>
+    <div data-bind="with: rootNode">
+        <h1 data-bind="text: text"></h1>
+        <list-item params="node: $data"></list-item>
+    </div>
+
+    <script>
+        $(function () {
+            ko.components.register("list-item", {
+                viewModel: function (param) {
+                    var node = ko.utils.unwrapObservable(param.node);
+                    return {
+                        text: ko.observable(node.text),
+                        children: ko.observableArray(node.children || [])
+                    }
+                },
+                template: '<div>\
+                                <ol data-bind="foreach: children">\
+                                    <li data-bind="text: text"></li>\
+                                    <list-item params="node: $data"></list-item>\
+                                </ol>\
+                            </div>'
+            });
+
+            var data = {
+                root: {
+                    text: "Shopping",
+                    children: [
+                        {
+                            text: "Produce",
+                            children: [
+                                { text: "Lettuce", complete: false },
+                                { text: "Tomatoes", complete: false },
+                                { text: "Apples", complete: false },
+                                { text: "Potatoes", complete: false },
+                            ]
+                        },
+                        {
+                            text: "Dairy",
+                            children: [
+                                { text: "Milk", complete: false },
+                                { text: "Cheese", complete: false },
+                            ]
+                        },
+                        {
+                            text: "Frozen",
+                            children: [
+                                { text: "Pizza", complete: false },
+                                { text: "Ice Cream", complete: false },
+                                { text: "Waffles", complete: false },
+                            ]
+                        }
+                    ]
+                }
+            }
+
+            var vm = {
+                rootNode: ko.observable(),
+                nodeItems: ko.observableArray([]),
+            }
+
+            vm.rootNode(data.root);
+
+            ko.applyBindings(vm);
+        }());
+    </script>
+</body>
+
+</html>
