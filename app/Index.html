@@ -4,7 +4,6 @@
         <title>UberList</title>
         <script src="knockout-3.2.0.debug.js"></script>        
         <script src="jquery-2.1.1.js"></script>
-        <script src="listItemViewModel.js"></script>
     </head>
 <body>
     <input data-bind="value: search, valueUpdate: 'input'" />
@@ -33,41 +32,103 @@
     </script>
 
     <script>
-        var data = {
-            root: {
-                text: "My Lists", complete: false,
-                children: [
-                    {
-                        text: "Produce", complete: false,
-                        children: [
-                            { text: "Lettuce", complete: false },
-                            { text: "Tomatoes", complete: false },
-                            { text: "Apples", complete: false },
-                            { text: "Potatoes", complete: false },
-                        ]
-                    },
-                    {
-                        text: "Dairy", complete: false,
-                        children: [
-                            { text: "Milk", complete: false },
-                            { text: "Cheese", complete: false },
-                        ]
-                    },
-                    {
-                        text: "Frozen", complete: false,
-                        children: [
-                            { text: "Pizza", complete: false },
-                            { text: "Ice Cream", complete: false },
-                            { text: "Waffles", complete: false },
-                        ]
-                    }
-                ]
-            }
-        }
-
-
         $(function () {
-            listItemViewModel.init(data);
+            function ListItem(values) {
+                if (!(this instanceof ListItem)) return new ListItem(values);
+                else if (this.initialized) return;
+
+                var node = values.node || values;
+                var vm = this;
+                this.text = ko.observable(ko.utils.unwrapObservable(node.text));
+                this.complete = ko.observable(ko.utils.unwrapObservable(node.complete));
+                this.children = ko.observableArray(ko.utils.arrayMap(ko.utils.unwrapObservable(node.children) || [], ListItem));
+                this.collapsed = ko.observable(true);
+                
+                this.initialized = true;
+            }
+            ListItem.prototype.ToggleVisible = function(context){
+                this.collapsed(!this.collapsed());
+
+            }
+
+            ListItem.prototype.AddNode = function (context) {
+                console.log(vm);
+                var node = new ListItem({ text: "text" });
+                ko.contextFor(arguments[1].target).$data.children.push(node);
+            }
+
+            ListItem.prototype.RemoveNode = function (context) {
+                ko.contextFor(arguments[1].target).$parent.children.remove(context);
+            }
+
+            var data = {
+                root: {
+                    text: "My Lists", complete: false,
+                    children: [
+                        {
+                            text: "Produce", complete: false,
+                            children: [
+                                { text: "Lettuce", complete: false },
+                                { text: "Tomatoes", complete: false },
+                                { text: "Apples", complete: false },
+                                { text: "Potatoes", complete: false },
+                            ]
+                        },
+                        {
+                            text: "Dairy", complete: false,
+                            children: [
+                                { text: "Milk", complete: false },
+                                { text: "Cheese", complete: false },
+                            ]
+                        },
+                        {
+                            text: "Frozen", complete: false,
+                            children: [
+                                { text: "Pizza", complete: false },
+                                { text: "Ice Cream", complete: false },
+                                { text: "Waffles", complete: false },
+                            ]
+                        }
+                    ]
+                }
+            }
+
+            
+
+            var vm = {
+                search: ko.observable(),
+                rootNode: ko.observable(new ListItem({
+                    text: data.root.text,
+                    children: data.root.children,
+                })),
+
+                displayNodes: ko.observableArray([]),
+
+                filterNodes: function () {
+                    var search = vm.search();
+                    
+                    var filtered = search && search.length
+                        ? findNodesBy(vm.search(), vm.rootNode().children())
+                        : [vm.rootNode()];
+                    
+                    vm.displayNodes(filtered);
+                },
+                clearFilter: function () {
+                    vm.search(null);
+                    vm.filterNodes();
+                }
+            }
+
+            vm.displayNodes.push(vm.rootNode());
+
+            function findNodesBy(searchText, nodes) {
+                var regex = new RegExp(".*(" + searchText + ").*", "i")
+                return ko.utils.arrayFilter(nodes, function (n) {
+                    return regex.test(n.text());
+                });
+            }
+
+            ko.applyBindings(vm);
         }());
     </script>
 </body>
