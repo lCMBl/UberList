@@ -17,21 +17,24 @@
             ko.components.register("list-item", {
                 viewModel: function (param) {
                     var node = ko.utils.unwrapObservable(param.node);
-                    return {
-                        
-                        <!--this is what the node is actually made out of (the actual viewModel)-->
-                        text: ko.observable(node.text),
-                        complete: ko.observable(node.complete),
-                        children: ko.observableArray(node.children || [])
+                    var vm = this;
+                    this.text = ko.observable(ko.utils.unwrapObservable(node.text));
+                    this.complete = ko.observable(node.complete);
+                    this.children = ko.observableArray(ko.utils.unwrapObservable(node.children) || []);
 
-
+                    <!-- add and remove functions-->
+                    this.AddNode = function(context) {
+                        console.log(vm);
+                        var node = ko.observable({text: "text", complete: false, children: []});
+                        node.children = ko.observableArray(node.children || []);
+                        ko.contextFor(arguments[1].target).$data.children.push(node);
                     }
                 },
                 template: '<div>\
                                 <ol data-bind="foreach: children">\
-                                    <li><input data-bind="text: text"/>\
+                                    <li><input data-bind="value: text"/>\
                                     <input type="checkbox" data-bind="checked: complete"/>\
-                                    <button data-bind="click: AddNode">+<button/>\
+                                    <button data-bind="click: $parent.AddNode">+</button>\
                                     </li>\
                                     <list-item params="node: $data"></list-item>\
                                 </ol>\
@@ -70,22 +73,16 @@
                 }
             }
 
-            <!-- add and remove node functions -->
-            this.AddNode = function() {
-                var node = {text: "text", complete: false, children: []}
-                data.root.children.push(node);
-            }
-
-            this.RemoveNode = function() {
-
-            }
             
+
             var vm = {
                 rootNode: ko.observable(),
-                nodeItems: ko.observableArray([]),
             }
 
-            vm.rootNode(data.root);
+            vm.rootNode({
+                text: ko.observable(data.root.text),
+                children: ko.observableArray(data.root.children),
+            });
 
             ko.applyBindings(vm);
         }());
