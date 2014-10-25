@@ -29,7 +29,9 @@
                 },
                 template: '<div>\
                                 <ol data-bind="foreach: children">\
-                                    <li data-bind="text: text"></li>\
+                                    <li><input data-bind="text: text"/>\
+                                    <input type="checkbox" data-bind="checked: complete"/>\
+                                    </li>\
                                     <list-item params="node: $data"></list-item>\
                                 </ol>\
                             </div>'
@@ -40,7 +42,7 @@
                     text: "Shopping", complete: false,
                     children: [
                         {
-                            text: "Produce",
+                            text: "Produce", complete: false,
                             children: [
                                 { text: "Lettuce", complete: false },
                                 { text: "Tomatoes", complete: false },
@@ -49,14 +51,14 @@
                             ]
                         },
                         {
-                            text: "Dairy",
+                            text: "Dairy", complete: false,
                             children: [
                                 { text: "Milk", complete: false },
                                 { text: "Cheese", complete: false },
                             ]
                         },
                         {
-                            text: "Frozen",
+                            text: "Frozen", complete: false,
                             children: [
                                 { text: "Pizza", complete: false },
                                 { text: "Ice Cream", complete: false },
