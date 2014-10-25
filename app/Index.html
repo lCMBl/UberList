@@ -9,6 +9,7 @@
     <div data-bind="with: rootNode">
         <h1 data-bind="text: text"></h1>
         <list-item params="node: $data"></list-item>
+
     </div>
 
     <script>
@@ -17,8 +18,13 @@
                 viewModel: function (param) {
                     var node = ko.utils.unwrapObservable(param.node);
                     return {
+                        
+                        <!--this is what the node is actually made out of (the actual viewModel)-->
                         text: ko.observable(node.text),
+                        complete: ko.observable(node.complete),
                         children: ko.observableArray(node.children || [])
+
+
                     }
                 },
                 template: '<div>\
@@ -31,12 +37,12 @@
 
             var data = {
                 root: {
-                    text: "Shopping",
+                    text: "Shopping", complete: false,
                     children: [
                         {
                             text: "Produce",
                             children: [
-                                { text: "Lettuce", complete: false },
+                                { text: "Lettuce", complete: false, children: [{},] },
                                 { text: "Tomatoes", complete: false },
                                 { text: "Apples", complete: false },
                                 { text: "Potatoes", complete: false },
