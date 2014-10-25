@@ -18,6 +18,7 @@
                 <input data-bind="value: text" />
                 <input type="checkbox" data-bind="checked: complete" />
                 <button data-bind="click: $parent.AddNode">+</button>
+                <button data-bind="click: $parent.RemoveNode">-</button>
                 <!-- ko template: "list-item-template" --><!-- /ko -->
             </li>
         </ol>
@@ -42,6 +43,10 @@
                 console.log(vm);
                 var node = new ListItem({ text: "text" });
                 ko.contextFor(arguments[1].target).$data.children.push(node);
+            }
+
+            ListItem.prototype.RemoveNode = function (context) {
+                ko.contextFor(arguments[1].target).$parent.children.remove(context);
             }
 
             var data = {
