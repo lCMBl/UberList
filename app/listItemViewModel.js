@@ -1,6 +1,7 @@
 ﻿var listItemViewModel = (function () {
 
     function ListItem(values) {
+        values = values || {};
         if (!(this instanceof ListItem)) return new ListItem(values);
         else if (this.initialized) return;
 
@@ -33,8 +34,8 @@
         var vm = {
             search: ko.observable(),
             rootNode: ko.observable(new ListItem({
-                text: values.root.text,
-                children: values.root.children,
+                text: values.text,
+                children: values.children,
             })),
 
             displayNodes: ko.observableArray([]),
@@ -51,6 +52,9 @@
             clearFilter: function () {
                 vm.search(null);
                 vm.filterNodes();
+            },
+            loadList: function() {
+                
             }
         }
 

@@ -20,7 +20,7 @@
     <script id="list-item-template" type="text/html">
         <ol data-bind="foreach: children">
             <li>
-                <a href="#" data-bind="click: $parent.ToggleVisible, text: collapsed() ? '+' : '-' "></a>
+                <a href="#" data-bind="click: $parent.ToggleVisible, text: collapsed() ? '+' : '-', visible: children().length"></a>
                 <input data-bind="value: text" />
                 <input type="checkbox" data-bind="checked: complete" />
                 <button data-bind="click: $parent.AddNode">+</button>
@@ -33,12 +33,14 @@
     </script>
 
     <script>
-        var data = {
-            root: {
-                text: "My Lists", complete: false,
+        var data = [
+            {
+                text: "My Lists",
+                complete: false,
                 children: [
                     {
-                        text: "Produce", complete: false,
+                        text: "Produce",
+                        complete: false,
                         children: [
                             { text: "Lettuce", complete: false },
                             { text: "Tomatoes", complete: false },
@@ -47,14 +49,16 @@
                         ]
                     },
                     {
-                        text: "Dairy", complete: false,
+                        text: "Dairy",
+                        complete: false,
                         children: [
                             { text: "Milk", complete: false },
                             { text: "Cheese", complete: false },
                         ]
                     },
                     {
-                        text: "Frozen", complete: false,
+                        text: "Frozen",
+                        complete: false,
                         children: [
                             { text: "Pizza", complete: false },
                             { text: "Ice Cream", complete: false },
@@ -63,11 +67,11 @@
                     }
                 ]
             }
-        }
+        ];
 
 
         $(function () {
-            listItemViewModel.init(data);
+            listItemViewModel.init(data[0]);
         }());
     </script>
 </body>
