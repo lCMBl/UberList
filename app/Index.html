@@ -8,38 +8,41 @@
 <body>
     <div data-bind="with: rootNode">
         <h1 data-bind="text: text"></h1>
-        <list-item params="node: $data"></list-item>
-
+        
+        <!-- ko template: "list-item-template" --><!-- /ko -->
     </div>
+
+    <script id="list-item-template" type="text/html">
+        <ol data-bind="foreach: children">
+            <li>
+                <input data-bind="value: text" />
+                <input type="checkbox" data-bind="checked: complete" />
+                <button data-bind="click: $parent.AddNode">+</button>
+                <!-- ko template: "list-item-template" --><!-- /ko -->
+            </li>
+        </ol>
+    </script>
 
     <script>
         $(function () {
-            ko.components.register("list-item", {
-                viewModel: function (param) {
-                    var node = ko.utils.unwrapObservable(param.node);
-                    var vm = this;
-                    this.text = ko.observable(ko.utils.unwrapObservable(node.text));
-                    this.complete = ko.observable(node.complete);
-                    this.children = ko.observableArray(ko.utils.unwrapObservable(node.children) || []);
+            function ListItem(values) {
+                if (!(this instanceof ListItem)) return new ListItem(values);
+                else if (this.initialized) return;
 
-                    <!-- add and remove functions-->
-                    this.AddNode = function(context) {
-                        console.log(vm);
-                        var node = ko.observable({text: "text", complete: false, children: []});
-                        node.children = ko.observableArray(node.children || []);
-                        ko.contextFor(arguments[1].target).$data.children.push(node);
-                    }
-                },
-                template: '<div>\
-                                <ol data-bind="foreach: children">\
-                                    <li><input data-bind="value: text"/>\
-                                    <input type="checkbox" data-bind="checked: complete"/>\
-                                    <button data-bind="click: $parent.AddNode">+</button>\
-                                    </li>\
-                                    <list-item params="node: $data"></list-item>\
-                                </ol>\
-                            </div>'
-            });
+                var node = values.node || values;
+                var vm = this;
+                this.text = ko.observable(ko.utils.unwrapObservable(node.text));
+                this.complete = ko.observable(ko.utils.unwrapObservable(node.complete));
+                this.children = ko.observableArray(ko.utils.arrayMap(ko.utils.unwrapObservable(node.children) || [], ListItem));
+
+                this.initialized = true;
+            }
+
+            ListItem.prototype.AddNode = function (context) {
+                console.log(vm);
+                var node = new ListItem({ text: "text" });
+                ko.contextFor(arguments[1].target).$data.children.push(node);
+            }
 
             var data = {
                 root: {
@@ -76,13 +79,11 @@
             
 
             var vm = {
-                rootNode: ko.observable(),
+                rootNode: ko.observable(new ListItem({
+                    text: data.root.text,
+                    children: data.root.children,
+                })),
             }
-
-            vm.rootNode({
-                text: ko.observable(data.root.text),
-                children: ko.observableArray(data.root.children),
-            });
 
             ko.applyBindings(vm);
         }());
