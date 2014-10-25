@@ -42,20 +42,13 @@
                 this.text = ko.observable(ko.utils.unwrapObservable(node.text));
                 this.complete = ko.observable(ko.utils.unwrapObservable(node.complete));
                 this.children = ko.observableArray(ko.utils.arrayMap(ko.utils.unwrapObservable(node.children) || [], ListItem));
-                this.collapsed = ko.observable(false);
-                this.collapsedMembers = ko.observableArray();
+                this.collapsed = ko.observable(true);
+                
                 this.initialized = true;
             }
             ListItem.prototype.ToggleVisible = function(context){
                 this.collapsed(!this.collapsed());
-                return;
 
-                if (!this.collapsed) {
-                    this.collapsedMembers = ko.contextFor(arguments[1].target).$data.children.removeAll();
-                } else {
-                    ko.contextFor(arguments[1].target).$data.children.push(this.collapsedMembers);
-                }
-                this.collapsed() = !this.collapsed();
             }
 
             ListItem.prototype.AddNode = function (context) {
@@ -70,7 +63,7 @@
 
             var data = {
                 root: {
-                    text: "Shopping", complete: false,
+                    text: "My Lists", complete: false,
                     children: [
                         {
                             text: "Produce", complete: false,
