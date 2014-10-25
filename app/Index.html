@@ -33,7 +33,11 @@
     </script>
 
     <script>
-        var data = [
+        
+
+
+        $(function () {
+            var data = [
             {
                 text: "My Lists",
                 complete: false,
@@ -67,11 +71,12 @@
                     }
                 ]
             }
-        ];
+            ];
 
-
-        $(function () {
-            listItemViewModel.init(data[0]);
+            var vm = listItemViewModel.init();
+            vm.lists(data);
+            vm.loadList(data[0]);
+            ko.applyBindings(vm);
         }());
     </script>
 </body>

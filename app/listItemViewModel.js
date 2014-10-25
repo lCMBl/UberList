@@ -30,15 +30,13 @@
         init: init,
     }
 
-    function init(values) {
+    function init() {
         var vm = {
             search: ko.observable(),
-            rootNode: ko.observable(new ListItem({
-                text: values.text,
-                children: values.children,
-            })),
+            rootNode: ko.observable(),
 
             displayNodes: ko.observableArray([]),
+            lists: ko.observableArray([]),
 
             filterNodes: function () {
                 var search = vm.search();
@@ -53,13 +51,15 @@
                 vm.search(null);
                 vm.filterNodes();
             },
-            loadList: function() {
-                
+            loadList: function (values) {
+                var item = new ListItem(values);
+                vm.rootNode(item);
+                vm.displayNodes([ item ]);
             }
         }
 
         vm.displayNodes.push(vm.rootNode());
-        ko.applyBindings(vm);
+        return vm;
     }
 
     function findNodesBy(searchText, nodes) {
