@@ -6,7 +6,11 @@
         <script src="jquery-2.1.1.js"></script>
     </head>
 <body>
-    <div data-bind="with: rootNode">
+    <input data-bind="value: search, valueUpdate: 'input'" />
+    <input type="button" data-bind="click: filterNodes" value="Search" />
+    <input type="button" data-bind="click: clearFilter" value="Clear" />
+
+    <div data-bind="foreach: displayNodes">
         <h1 data-bind="text: text"></h1>
         <button data-bind="click: AddNode">+</button>
         <!-- ko template: "list-item-template" --><!-- /ko -->
@@ -84,10 +88,36 @@
             
 
             var vm = {
+                search: ko.observable(),
                 rootNode: ko.observable(new ListItem({
                     text: data.root.text,
                     children: data.root.children,
                 })),
+
+                displayNodes: ko.observableArray([]),
+
+                filterNodes: function () {
+                    var search = vm.search();
+                    
+                    var filtered = search && search.length
+                        ? findNodesBy(vm.search(), vm.rootNode().children())
+                        : [vm.rootNode()];
+                    
+                    vm.displayNodes(filtered);
+                },
+                clearFilter: function () {
+                    vm.search(null);
+                    vm.filterNodes();
+                }
+            }
+
+            vm.displayNodes.push(vm.rootNode());
+
+            function findNodesBy(searchText, nodes) {
+                var regex = new RegExp(".*(" + searchText + ").*", "i")
+                return ko.utils.arrayFilter(nodes, function (n) {
+                    return regex.test(n.text());
+                });
             }
 
             ko.applyBindings(vm);
