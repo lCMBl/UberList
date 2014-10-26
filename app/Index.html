@@ -13,29 +13,40 @@
     <link href="resources/jquery-ui.theme.css" rel="stylesheet" />
 </head>
     <body>
-        <section id="list-master" class="ui-accordion ui-widget ui-helper-reset">
-            <h3 class="ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">My Lists</h3>
-            <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" style="padding: 3px 5px; margin: auto auto 10px auto">
-                <ul data-bind="foreach: lists" class="ui-widget ui-widget-content ui-menu" style="margin: 0 -5px" id="main-nav">
-                    <li class="ui-menu-item" data-bind="click: $root.loadList, css: {'ui-state-active': isActive }">
-                        <span data-bind="text: text"></span>
-                        <span data-bind="click: $parent.deleteList" class="ui-icon ui-icon-circle-close" style="left: auto; right: 10px;"></span>
-                    </li>
-                </ul>
+        <section id="list-master" >
+            <div class="ui-accordion ui-widget ui-helper-reset">
+                <h3 class="ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top" style="padding-top: 1px; padding-bottom: 1px;">My Lists</h3>
+                <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" style="padding: 3px 5px; margin: auto auto 10px auto">
+                    <ul data-bind="foreach: lists" class="ui-widget ui-widget-content ui-menu" style="margin: 0 -5px" id="main-nav">
+                        <li class="ui-menu-item" data-bind="click: $root.loadList, css: {'ui-state-active': isActive }">
+                            <span data-bind="text: text"></span>
+                            <span data-bind="click: $parent.deleteList" class="ui-icon ui-icon-circle-close" style="left: auto; right: 10px;"></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <strong style="font-size: .8em;">Create New List</strong>
+                <input data-bind="value: newListName" style="width: 166px;" />
+                <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
+                    <span data-bind="click: createNewList" class="ui-icon ui-icon-circle-plus"></span>
+                </span>
             </div>
 
-            <input data-bind="value: newListName" placeholder="new list" style="width: 166px;" />
-            <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
-                <span data-bind="click: createNewList" class="ui-icon ui-icon-circle-plus"></span>
-            </span>
+            <div id="search" class="ui-accordion ui-widget ui-helper-reset" style="margin-top: 25px">
+                <h4 class="ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top" style="padding-top: 1px; padding-bottom: 1px;">Search</h4>
+                <div class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active" style="padding: 3px 5px; margin: auto auto 10px auto">
+                    <input data-bind="value: search, valueUpdate: 'input'" class="ui-widget" style="width: 155px;" />
+                    <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
+                        <span data-bind="click: filterNodes" class="ui-icon ui-icon-search"></span>
+                    </span>
+                    <a href="#" data-bind="click: clearFilter" style="font-size: .7em;">Clear Filter</a>
+                </div>
+            </div>
         </section>
+
         
         <section id="content">
-            <input data-bind="value: search, valueUpdate: 'input'" />
-            <input type="button" data-bind="click: filterNodes" value="Search" />
-            <input type="button" data-bind="click: clearFilter" value="Clear" />
             
-
             <div data-bind="foreach: displayNodes">
                 <h1 data-bind="text: text"></h1>
                 <button data-bind="click: AddNode">+</button>
