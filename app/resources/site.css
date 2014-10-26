@@ -25,5 +25,16 @@ ul#main-nav {
     }
 
 #content h1 {
+    border-bottom: 1px solid #aed0ea;
+}
+
+#notes-container {
     
 }
+    #notes-container ol {
+        list-style: none;
+    }
+    #notes-container > ol {
+        list-style: none;
+        padding-left: 0;
+    }

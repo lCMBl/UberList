@@ -45,9 +45,8 @@
         </section>
 
         
-        <section id="content">
-            
-            <div data-bind="foreach: displayNodes">
+        <section id="content" class="ui-widget">
+            <div data-bind="foreach: displayNodes" id="notes-container">
                 <h1 data-bind="text: text"></h1>
                 <button data-bind="click: AddNode">+</button>
                 <!-- ko template: "list-item-template" --><!-- /ko -->
@@ -57,12 +56,22 @@
         <script id="list-item-template" type="text/html">
             <ol data-bind="foreach: children">
                 <li>
-                    <a href="#" data-bind="click: $parent.ToggleVisible, text: collapsed() ? '(+)' : '(-)', visible: children().length"></a>
-                    <input data-bind="value: text" />
+                    <span class="ui-icon" data-bind="click: $parent.AddNode, click: $parent.ToggleVisible, css: {'ui-icon-triangle-1-s': !collapsed(), 'ui-icon-triangle-1-e': collapsed}" style="display: inline-block"></span>
                     <input type="checkbox" data-bind="checked: complete" />
-                    <button data-bind="click: $parent.AddNodeSameLevel">V</button>
-                    <button data-bind="click: $parent.AddNode">></button>
-                    <button data-bind="click: $parent.RemoveNode">-</button>
+                    <input type="text" data-bind="value: text" />
+                    
+                    <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
+                        <span data-bind="click: $parent.AddNode" class="ui-icon ui-icon-plus"></span>
+                    </span>
+                    
+                    <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
+                        <span data-bind="click: $parent.AddNodeSameLevel" class="ui-icon ui-icon-arrowthickstop-1-s"></span>
+                    </span>
+
+                    <span class="ui-state-default ui-corner-all" style="display: inline-block; padding: 2px; vertical-align: middle">
+                        <span data-bind="click: $parent.RemoveNode" class="ui-icon ui-icon-trash"></span>
+                    </span>
+
                     <div data-bind="visible: !collapsed()">
                         <!-- ko template: { name: "list-item-template" } --><!-- /ko -->
                     </div>
