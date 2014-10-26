@@ -55,8 +55,13 @@
                 var item = new ListItem(values);
                 vm.rootNode(item);
                 vm.displayNodes([ item ]);
+            },
+            DeleteList: function (values) {
+
             }
+
         }
+
 
         vm.displayNodes.push(vm.rootNode());
         return vm;
