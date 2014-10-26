@@ -39,7 +39,9 @@
             
             var NewList = function (values) {
                 console.log(newListName());
-                values.lists.push(newListName());
+                var tempItem = [{text: newListName(), complete: false}];
+                tempItem.text = newListName();
+                values.lists.push(tempItem);
                 values.loadList(values.lists()[values.lists().length-1]);
                 console.log(values.lists()[values.lists().length-1]);
             }
