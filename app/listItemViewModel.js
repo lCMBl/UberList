@@ -18,9 +18,13 @@
     ListItem.prototype.ToggleVisible = function () {
         this.collapsed(!this.collapsed());
     }
-    ListItem.prototype.AddNode = function () {
+    ListItem.prototype.AddNode = function (values) {
         var node = new ListItem();
         ko.contextFor(arguments[1].target).$data.children.push(node);
+    }
+    ListItem.prototype.AddNodeSameLevel = function (values) {
+        var node = new ListItem();
+        ko.contextFor(arguments[1].target).$parent.children.push(node);
     }
     ListItem.prototype.RemoveNode = function (context) {
         ko.contextFor(arguments[1].target).$parent.children.remove(context);
