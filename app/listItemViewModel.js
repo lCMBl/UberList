@@ -56,9 +56,7 @@
                 vm.rootNode(item);
                 vm.displayNodes([ item ]);
             },
-            DeleteList: function (values) {
-
-            }
+            
 
         }
 

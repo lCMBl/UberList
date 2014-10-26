@@ -10,7 +10,11 @@
     <input data-bind="value: search, valueUpdate: 'input'" />
     <input type="button" data-bind="click: filterNodes" value="Search" />
     <input type="button" data-bind="click: clearFilter" value="Clear" />
-    <p><input data-bind="value: newListName"/><button data-bind="click: NewList">Make a New List</button></p>
+    <p>
+        <input data-bind="value: newListName"/>
+        <button data-bind="click: NewList">Make a New List</button>
+        <button data-bind="click: DeleteList, enable: lists().length > 1">Delete this List</button>
+    </p>
 
     <div data-bind="foreach: displayNodes">
         <h1 data-bind="text: text"></h1>
@@ -36,14 +40,22 @@
     <script>
         
             var newListName = ko.observable("new list");
-            
+            var currentListIndex = 0;
+            var currentList;
+
             var NewList = function (values) {
-                console.log(newListName());
-                var tempItem = [{text: newListName(), complete: false}];
+                var tempItem = ko.observableArray([{text: newListName(), complete: false}]);
                 tempItem.text = newListName();
                 values.lists.push(tempItem);
-                values.loadList(values.lists()[values.lists().length-1]);
-                console.log(values.lists()[values.lists().length-1]);
+                currentListIndex = values.lists().length-1;
+                currentList = values.lists()[currentListIndex];
+                values.loadList(currentList);
+            }
+
+            var DeleteList = function (values) {
+                values.loadList(values.lists()[currentListIndex-1]);
+                values.lists.remove(values.lists()[currentListIndex]);
+                currentListIndex--;
             }
 
         $(function () {
