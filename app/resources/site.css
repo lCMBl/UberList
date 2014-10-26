@@ -1,0 +1,25 @@
+﻿body {
+}
+
+
+#list-master {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    position: fixed;
+    padding: 10px;
+    background-color: #ebeeef;
+}
+
+#content {
+    margin-left: 220px;
+}
+
+ul#main-nav {
+    
+}
+    ul#main-nav li {
+        line-height: 1.2em;
+        border-bottom: .5px solid #c7c7c7;
+    }

@@ -11,6 +11,7 @@
         this.complete = ko.observable(ko.utils.unwrapObservable(node.complete));
         this.children = ko.observableArray(ko.utils.arrayMap(ko.utils.unwrapObservable(node.children) || [], ListItem));
         this.collapsed = ko.observable(false);
+        this.isActive = ko.observable(false);
 
         this.initialized = true;
     }
@@ -38,10 +39,16 @@
         var vm = {
             search: ko.observable(),
             rootNode: ko.observable(),
+            newListName: ko.observable(),
 
             displayNodes: ko.observableArray([]),
             lists: ko.observableArray([]),
 
+            setListsData: function (lists) {
+                var mappedLists = ko.utils.arrayMap(lists, ListItem);
+                vm.lists(mappedLists);
+                vm.loadList(mappedLists[0]);
+            },
             filterNodes: function () {
                 var search = vm.search();
 
@@ -56,12 +63,32 @@
                 vm.filterNodes();
             },
             loadList: function (values) {
-                var item = new ListItem(values);
+                //var item = values instanceof ListItem ? values : new ListItem(values);
+                var item = values;
+                
                 vm.rootNode(item);
-                vm.displayNodes([ item ]);
-            },
-            
+                vm.displayNodes([item]);
+                setActiveStates();
 
+                function setActiveStates() {
+                    ko.utils.arrayForEach(vm.lists(), function(list) {
+                        list.isActive(item === list);
+                    });
+                }
+            },
+            createNewList: function (values) {
+                var name = vm.newListName();
+                if (!name || !name.length) return;
+                var list = new ListItem({ text: name });
+                list.children.push(new ListItem());
+                values.lists.push(list);
+                vm.loadList(list);
+
+                vm.newListName(null);
+            },
+            deleteList: function (context, args) {
+                vm.lists.remove(context);
+            }
         }
 
 
