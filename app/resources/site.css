@@ -38,3 +38,19 @@ ul#main-nav {
         list-style: none;
         padding-left: 0;
     }
+    
+    #notes-container input[type='text'] {
+        border: 1px transparent solid;
+        padding: 1px 2px;
+        -ms-border-radius: 3px;
+        border-radius: 3px;
+        width: 200px;
+    }
+    
+    #notes-container input[type='text']:hover {
+        border: 1px #999 solid;
+    }
+
+    #notes-container input[type='text']:focus {
+        border: 1px #aed0ea solid;
+    }
