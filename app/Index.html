@@ -10,6 +10,7 @@
     <input data-bind="value: search, valueUpdate: 'input'" />
     <input type="button" data-bind="click: filterNodes" value="Search" />
     <input type="button" data-bind="click: clearFilter" value="Clear" />
+    <p><input data-bind="value: newListName"/><button data-bind="click: ">Make a New List</button></p>
 
     <div data-bind="foreach: displayNodes">
         <h1 data-bind="text: text"></h1>
@@ -33,7 +34,7 @@
     </script>
 
     <script>
-        
+        var newListName = ko.observable("new list");
 
 
         $(function () {
