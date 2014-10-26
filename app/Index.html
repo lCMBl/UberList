@@ -28,7 +28,8 @@
                 <a href="#" data-bind="click: $parent.ToggleVisible, text: collapsed() ? '+' : '-', visible: children().length"></a>
                 <input data-bind="value: text" />
                 <input type="checkbox" data-bind="checked: complete" />
-                <button data-bind="click: $parent.AddNode">+</button>
+                <button data-bind="click: AddNode">V</button>
+                <button data-bind="click: $parent.AddNode">></button>
                 <button data-bind="click: $parent.RemoveNode">-</button>
                 <div data-bind="visible: !collapsed()">
                     <!-- ko template: { name: "list-item-template" } --><!-- /ko -->
